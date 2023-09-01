@@ -34,3 +34,10 @@ document.getElementById('searchButton').addEventListener('click', async () => {
     console.error(error);
   }
 });
+
+document.getElementById('query').addEventListener('keydown', event => {
+  if (event.keyCode === 13) { // Check if the pressed key is Enter (key code 13)
+    event.preventDefault(); // Prevent the default behavior of the Enter key (form submission)
+    document.getElementById('searchButton').click(); // Programmatically trigger the search button click event
+  }
+});
