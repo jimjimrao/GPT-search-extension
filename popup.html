@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GPT-3.5 Turbo Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      width: 400px; /* Set the width of the popup */
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+    }
+    #response {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>GPT-3.5 Turbo Search</h1>
+  <input type="text" id="apiKeyInput" placeholder="Enter your API key">
+  <input type="text" id="query" placeholder="Enter your query">
+  <button id="searchButton">Search</button>
+  <div id="response"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
