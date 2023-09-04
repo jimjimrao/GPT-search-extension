@@ -32,7 +32,9 @@ const displayApiKey = async () => {
     const apiKey = await getApiKey();
     const apiKeyDisplay = document.getElementById('apiKeyDisplay');
     if (apiKey) {
-      apiKeyDisplay.textContent = `API Key: ${apiKey}`;
+      const asterisks = '*'.repeat(apiKey.length - 4);
+      const maskedApiKey = `${asterisks}${apiKey.slice(-4)}`;
+      apiKeyDisplay.textContent = `API Key: ${maskedApiKey}`;
     }
   } catch (error) {
     console.error(error);
