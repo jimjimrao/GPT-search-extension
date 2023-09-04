@@ -18,8 +18,7 @@ const setApiKey = async (apiKey) => {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
       } else {
-        const apiKeyDisplay = document.getElementById('apiKeyDisplay');
-        apiKeyDisplay.textContent = `API Key: ${apiKey}`;
+        displayApiKey();
         resolve();
       }
     });
