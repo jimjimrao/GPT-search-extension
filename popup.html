@@ -18,18 +18,29 @@
       #response {
         margin-top: 20px;
       }
-
       .button-container {
         display: flex;
         justify-content: space-between;
         margin-top: 20px;
+      }
+      .query-input {
+        height: 50px;
+        width: 100%;
+        font-size: 16px;
+        padding: 10px;
+        box-sizing: border-box;
       }
     </style>
   </head>
   <body>
     <h1>GPT-3.5 Turbo Search</h1>
     <div id="apiKeyDisplay" class="display"></div>
-    <input type="text" id="query" placeholder="Enter your query" />
+    <input
+      type="text"
+      id="query"
+      class="query-input"
+      placeholder="Enter your query"
+    />
     <div class="button-container">
       <button id="searchButton">Search</button>
       <button id="changeApiKeyButton">Change API Key</button>
