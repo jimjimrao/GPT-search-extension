@@ -1,27 +1,88 @@
-document.getElementById('searchButton').addEventListener('click', async () => {
-  const apiKey = document.getElementById('apiKeyInput').value; // Get the entered API key
-  const query = document.getElementById('query').value;
-  const responseElement = document.getElementById('response');
-  responseElement.textContent = 'Loading...';
-
-  const requestBody = {
-    model: 'gpt-3.5-turbo',
-    messages: [
-      {
-        role: 'system',
-        content: query
+// Function to retrieve the API key from chrome.storage.sync
+const getApiKey = async () => {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get('apiKey', ({ apiKey }) => {
+      if (apiKey) {
+        resolve(apiKey);
+      } else {
+        reject(new Error('API key not found'));
       }
-    ],
-    temperature: 0.8,
-    max_tokens: 300
-  };
+    });
+  });
+};
 
+// Function to save the API key to chrome.storage.sync
+const setApiKey = async (apiKey) => {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.set({ apiKey }, () => {
+      if (chrome.runtime.lastError) {
+        reject(chrome.runtime.lastError);
+      } else {
+        const apiKeyDisplay = document.getElementById('apiKeyDisplay');
+        apiKeyDisplay.textContent = `API Key: ${apiKey}`;
+        resolve();
+      }
+    });
+  });
+};
+
+// Function to display the API key if it exists
+const displayApiKey = async () => {
   try {
+    const apiKey = await getApiKey();
+    const apiKeyDisplay = document.getElementById('apiKeyDisplay');
+    if (apiKey) {
+      apiKeyDisplay.textContent = `API Key: ${apiKey}`;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Call the displayApiKey function when the popup is loaded
+window.addEventListener('load', async () => {
+  await displayApiKey();
+});
+
+// Event listener for the change API key button
+document.getElementById('changeApiKeyButton').addEventListener('click', async () => {
+  const newApiKey = prompt('Enter your new API key:');
+  if (newApiKey) {
+    try {
+      await setApiKey(newApiKey);
+      console.log('API key saved:', newApiKey);
+      document.getElementById('apiKeyInput').value = newApiKey;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
+
+// Event listener for the search button
+document.getElementById('searchButton').addEventListener('click', async () => {
+  try {
+    const apiKey = await getApiKey();
+    const query = document.getElementById('query').value;
+    const responseElement = document.getElementById('response');
+    responseElement.textContent = 'Loading...';
+
+    const requestBody = {
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: query
+        }
+      ],
+      temperature: 0.8,
+      max_tokens: 300
+    };
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}` // Use the entered API key
+        'Authorization': `Bearer ${apiKey}` // Use the retrieved API key
       },
       body: JSON.stringify(requestBody)
     });
@@ -30,6 +91,7 @@ document.getElementById('searchButton').addEventListener('click', async () => {
     const content = data.choices[0].message.content;
     responseElement.textContent = content;
   } catch (error) {
+    const responseElement = document.getElementById('response');
     responseElement.textContent = 'An error occurred. Please try again. Here is the error: ' + error;
     console.error(error);
   }
