@@ -41,7 +41,7 @@ const displayApiKey = async () => {
 };
 
 // Call the displayApiKey function when the popup is loaded
-window.addEventListener('load', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
   await displayApiKey();
 });
 
@@ -52,7 +52,6 @@ document.getElementById('changeApiKeyButton').addEventListener('click', async ()
     try {
       await setApiKey(newApiKey);
       console.log('API key saved:', newApiKey);
-      document.getElementById('apiKeyInput').value = newApiKey;
     } catch (error) {
       console.error(error);
     }
