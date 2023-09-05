@@ -87,15 +87,21 @@ document.getElementById('searchButton').addEventListener('click', async () => {
       body: JSON.stringify(requestBody)
     });
 
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`API error: ${errorData.error.message}`);
+    }
+
     const data = await response.json();
     const content = data.choices[0].message.content;
     responseElement.textContent = content;
   } catch (error) {
     const responseElement = document.getElementById('response');
-    responseElement.textContent = 'An error occurred. Please try again. Here is the error: ' + error;
+    responseElement.textContent = 'An error occurred. Please try again. \nError code: ' + error.message;
     console.error(error);
   }
 });
+
 
 document.getElementById('query').addEventListener('keydown', event => {
   if (event.keyCode === 13) { // Check if the pressed key is Enter (key code 13)
